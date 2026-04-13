@@ -72,8 +72,18 @@ export default function Transactions() {
       const { data } = await api.post('/upload/receipt', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      setForm((prev) => ({ ...prev, receiptUrl: data.url }));
-      toast.success('Receipt uploaded');
+      setForm((prev) => {
+        const updates = { ...prev, receiptUrl: data.url };
+        if (data.ocr?.amount) updates.amount = data.ocr.amount;
+        if (data.ocr?.date) updates.date = data.ocr.date;
+        if (data.ocr?.description && !prev.description) updates.description = data.ocr.description;
+        return updates;
+      });
+      const filled = [];
+      if (data.ocr?.amount) filled.push(`$${data.ocr.amount}`);
+      if (data.ocr?.date) filled.push(data.ocr.date);
+      if (data.ocr?.description) filled.push(data.ocr.description);
+      toast.success(filled.length > 0 ? `Scanned: ${filled.join(', ')}` : 'Receipt uploaded');
     } catch (err) {
       toast.error('Upload failed');
     } finally {
@@ -259,7 +269,7 @@ export default function Transactions() {
                   className="flex-1 flex items-center justify-center gap-2 py-6 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-500 hover:border-kango-navy hover:text-kango-navy transition-colors"
                 >
                   <Camera size={20} />
-                  {uploading ? 'Uploading...' : 'Take Photo'}
+                  {uploading ? 'Scanning...' : 'Take Photo'}
                 </button>
                 <button
                   type="button"
@@ -268,7 +278,7 @@ export default function Transactions() {
                   className="flex-1 flex items-center justify-center gap-2 py-6 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-500 hover:border-kango-navy hover:text-kango-navy transition-colors"
                 >
                   <ImageIcon size={20} />
-                  {uploading ? 'Uploading...' : 'Choose File'}
+                  {uploading ? 'Scanning...' : 'Choose File'}
                 </button>
               </div>
             )}
