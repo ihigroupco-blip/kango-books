@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "install:all": "cd backend && npm install && cd ../frontend && npm install",
-    "build": "cd frontend && npm run build",
-    "start": "cd backend && NODE_ENV=production node src/index.js",
-    "migrate": "cd backend && npx prisma migrate deploy",
-    "postinstall": "npm run install:all && npm run migrate && npm run build"
+    "build": "npm run install:all && cd frontend && npm run build",
+    "start": "cd backend && npx prisma migrate deploy && NODE_ENV=production node src/index.js"
   }
 }
