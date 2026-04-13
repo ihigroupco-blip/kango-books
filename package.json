@@ -1,5 +1,9 @@
 {
   "name": "kango-books",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "scripts": {
+    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "start": "cd backend && npx prisma migrate deploy && NODE_ENV=production node src/index.js"
+  }
 }
