@@ -1,0 +1,22 @@
+{
+  "name": "Kango Books - Accounting",
+  "short_name": "Kango Books",
+  "description": "Small business accounting for Kango Facility Services",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#1a2b6b",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

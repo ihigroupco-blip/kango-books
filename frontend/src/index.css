@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-kango-navy: #1a2b6b;
+  --color-kango-red: #e84425;
+  --color-kango-orange: #e8611f;
+  --color-primary: #1a2b6b;
+  --color-primary-light: #2d4299;
+  --color-primary-dark: #111d4a;
+  --color-accent: #e84425;
+  --color-accent-light: #f06040;
+  --color-success: #059669;
+  --color-danger: #dc2626;
+  --color-warning: #d97706;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+  padding-bottom: env(safe-area-inset-bottom);
+}

@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  password     String
+  name         String
+  businessName String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+  invoices     Invoice[]
+  categories   Category[]
+  clients      Client[]
+  leads        Lead[]
+  bookings     Booking[]
+}
+
+model Category {
+  id           String        @id @default(uuid())
+  name         String
+  type         TransactionType
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+
+  @@unique([name, userId, type])
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  description String
+  amount      Decimal         @db.Decimal(12, 2)
+  type        TransactionType
+  date        DateTime
+  categoryId  String?
+  category    Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoiceId   String?
+  invoice     Invoice?        @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  receiptUrl  String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model Client {
+  id        String    @id @default(uuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices  Invoice[]
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+
+  @@unique([name, userId])
+}
+
+model Invoice {
+  id           String        @id @default(uuid())
+  invoiceNumber String
+  clientId     String
+  client       Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issueDate    DateTime
+  dueDate      DateTime
+  status       InvoiceStatus @default(DRAFT)
+  items        InvoiceItem[]
+  transactions Transaction[]
+  subtotal     Decimal       @db.Decimal(12, 2)
+  tax          Decimal       @default(0) @db.Decimal(12, 2)
+  total        Decimal       @db.Decimal(12, 2)
+  notes        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@unique([invoiceNumber, userId])
+}
+
+model InvoiceItem {
+  id          String  @id @default(uuid())
+  description String
+  quantity    Decimal @db.Decimal(10, 2)
+  unitPrice   Decimal @db.Decimal(12, 2)
+  amount      Decimal @db.Decimal(12, 2)
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model Lead {
+  id          String     @id @default(uuid())
+  name        String
+  company     String?
+  email       String?
+  phone       String?
+  status      LeadStatus @default(COLD)
+  value       Decimal?   @db.Decimal(12, 2)
+  notes       String?
+  source      String?
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Booking {
+  id          String      @id @default(uuid())
+  title       String
+  date        DateTime
+  startTime   String?
+  endTime     String?
+  type        BookingType @default(NOTE)
+  clientId    String?
+  client      Client?     @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  notes       String?
+  location    String?
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum BookingType {
+  BOOKING
+  NOTE
+  FOLLOWUP
+}
+
+enum LeadStatus {
+  COLD
+  CONTACTED
+  PROPOSAL
+  WON
+  LOST
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
