@@ -10,6 +10,7 @@ import {
   Users,
   Target,
   CalendarDays,
+  Car,
 } from 'lucide-react';
 import { useState } from 'react';
 import logoHorizontal from '../assets/logo-horizontal.png';
@@ -19,6 +20,7 @@ const nav = [
   { to: '/transactions', label: 'Transactions', icon: ArrowLeftRight },
   { to: '/invoices', label: 'Invoices', icon: FileText },
   { to: '/calendar', label: 'Calendar', icon: CalendarDays },
+  { to: '/logbook', label: 'FBT Logbook', icon: Car },
   { to: '/leads', label: 'Leads', icon: Target },
   { to: '/clients', label: 'Clients', icon: Users },
   { to: '/reports', label: 'Reports', icon: BarChart3 },

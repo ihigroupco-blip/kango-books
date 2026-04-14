@@ -12,6 +12,7 @@ import Clients from './pages/Clients';
 import Reports from './pages/Reports';
 import Leads from './pages/Leads';
 import Calendar from './pages/Calendar';
+import Logbook from './pages/Logbook';
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
@@ -49,6 +50,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Layout><Calendar /></Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/logbook"
+        element={
+          <ProtectedRoute>
+            <Layout><Logbook /></Layout>
           </ProtectedRoute>
         }
       />

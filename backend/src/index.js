@@ -11,6 +11,11 @@ const reportRoutes = require('./routes/reports');
 const leadRoutes = require('./routes/leads');
 const bookingRoutes = require('./routes/bookings');
 const uploadRoutes = require('./routes/upload');
+const vehicleRoutes = require('./routes/vehicles');
+const tripRoutes = require('./routes/trips');
+const logbookRoutes = require('./routes/logbooks');
+const vehicleExpenseRoutes = require('./routes/vehicleExpenses');
+const fbtReportRoutes = require('./routes/fbtReports');
 const path = require('path');
 
 const app = express();
@@ -28,6 +33,11 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/leads', leadRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/trips', tripRoutes);
+app.use('/api/logbooks', logbookRoutes);
+app.use('/api/vehicle-expenses', vehicleExpenseRoutes);
+app.use('/api/fbt-reports', fbtReportRoutes);
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
