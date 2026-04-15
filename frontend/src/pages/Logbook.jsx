@@ -648,6 +648,10 @@ function ReportsTab() {
           {yearOptions.map((y) => <option key={y} value={y}>FBT {y - 1}-{String(y).slice(-2)}</option>)}
         </select>
         <div className="flex-1" />
+        <a href={`/api/fbt-reports/export-pdf?vehicleId=${selectedVehicle}&fbtYear=${fbtYear}`} target="_blank"
+          className="text-sm bg-kango-red text-white px-3 py-2 rounded-lg hover:bg-kango-red/90 font-medium">
+          Export PDF
+        </a>
         <a href={`/api/fbt-reports/export?vehicleId=${selectedVehicle}&fbtYear=${fbtYear}`} target="_blank"
           className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 font-medium">
           Export CSV

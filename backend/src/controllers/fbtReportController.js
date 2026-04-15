@@ -24,4 +24,13 @@ async function exportData(req, res, next) {
   } catch (err) { next(err); }
 }
 
-module.exports = { summary, expenseSummary, odometerGaps, exportData };
+async function exportPDF(req, res, next) {
+  try {
+    const pdf = await fbtReportService.exportPDF(req.userId, req.query.vehicleId, req.query.fbtYear);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="fbt-logbook-${req.query.fbtYear || 'all'}.pdf"`);
+    res.send(pdf);
+  } catch (err) { next(err); }
+}
+
+module.exports = { summary, expenseSummary, odometerGaps, exportData, exportPDF };

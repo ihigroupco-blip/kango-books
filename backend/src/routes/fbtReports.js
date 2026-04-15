@@ -8,5 +8,6 @@ router.get('/summary', controller.summary);
 router.get('/expense-summary', controller.expenseSummary);
 router.get('/odometer-gaps', controller.odometerGaps);
 router.get('/export', controller.exportData);
+router.get('/export-pdf', controller.exportPDF);
 
 module.exports = router;
