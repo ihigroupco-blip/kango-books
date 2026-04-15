@@ -648,14 +648,28 @@ function ReportsTab() {
           {yearOptions.map((y) => <option key={y} value={y}>FBT {y - 1}-{String(y).slice(-2)}</option>)}
         </select>
         <div className="flex-1" />
-        <a href={`/api/fbt-reports/export-pdf?vehicleId=${selectedVehicle}&fbtYear=${fbtYear}`} target="_blank"
+        <button onClick={async () => {
+            try {
+              const { data } = await api.get(`/fbt-reports/export-pdf?vehicleId=${selectedVehicle}&fbtYear=${fbtYear}`, { responseType: 'blob' });
+              const url = URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
+              const a = document.createElement('a'); a.href = url; a.download = `fbt-logbook-${fbtYear}.pdf`; a.click(); URL.revokeObjectURL(url);
+              toast.success('PDF downloaded');
+            } catch { toast.error('Export failed'); }
+          }}
           className="text-sm bg-kango-red text-white px-3 py-2 rounded-lg hover:bg-kango-red/90 font-medium">
           Export PDF
-        </a>
-        <a href={`/api/fbt-reports/export?vehicleId=${selectedVehicle}&fbtYear=${fbtYear}`} target="_blank"
+        </button>
+        <button onClick={async () => {
+            try {
+              const { data } = await api.get(`/fbt-reports/export?vehicleId=${selectedVehicle}&fbtYear=${fbtYear}`);
+              const url = URL.createObjectURL(new Blob([data], { type: 'text/csv' }));
+              const a = document.createElement('a'); a.href = url; a.download = `fbt-logbook-${fbtYear}.csv`; a.click(); URL.revokeObjectURL(url);
+              toast.success('CSV downloaded');
+            } catch { toast.error('Export failed'); }
+          }}
           className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 font-medium">
           Export CSV
-        </a>
+        </button>
       </div>
 
       {loading ? <p className="text-center text-gray-400 py-16">Loading...</p> : summary && (
